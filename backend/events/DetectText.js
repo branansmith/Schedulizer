@@ -86,8 +86,7 @@ async function detectText(photoName) {
       person.saturdayTime;
     res.Blocks.forEach(block => {
       
-
-      let databaseData = [];
+      
 
 
       //console.log(block.Geometry.BoundingBox);
@@ -98,30 +97,46 @@ async function detectText(photoName) {
       //extend times throw off the order, as well as not grouping the time 
       //frames, for example sometimes the block.Text only prints a 9:30AM
       //instead of a 9:30AM - 5:30PM
+      let needSecondTime = false;
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
-        console.log(`Text: ${block.Text}`)
+        let timeFrame = [];
+        let time;
+        if(isTimeFrame.test(block.Text)) {
+          timeFrame = block.Text.split(" ");
+          if (timeFrame[0] != undefined && timeFrame[2] != undefined) {
+            time = timeFrame[0] + " - " + timeFrame[2];
+          } else if (timeFrame[0] != undefined && timeFrame[2] == undefined) {
+              time = timeFrame[0] + " - " + timeFrame[1];
+            } else {
+              needSecondTime = true;
+            }
+          } else {
+            time = block.Text;
+          }
+        //console.log(`Text: ${block.Text}`)
+        if(!needSecondTime) {
         weekFilled++;
         switch (weekFilled) {
           case 1:
-            person.sundayTime = block.Text;
+            person.sundayTime = time;
             break;
           case 2:
-            person.mondayTime = block.Text;
+            person.mondayTime = time;
             break;
           case 3:
-            person.tuesdayTime = block.Text;
+            person.tuesdayTime = time;
             break;
           case 4:
-            person.wednesdayTime = block.Text;
+            person.wednesdayTime = time;
             break;
           case 5:
-            person.thursdayTime = block.Text;
+            person.thursdayTime = time;
             break;
           case 6:
-            person.fridayTime = block.Text;
+            person.fridayTime = time;
             break;
           case 7:
-            person.saturdayTime = block.Text;
+            person.saturdayTime = time;
             break;
           case 8:
             person.name = block.Text;
@@ -129,15 +144,18 @@ async function detectText(photoName) {
             weekFilled = 0;
             break;
         }
-
+        
       }
       
-    })
-    console.log(person);
 
-  } catch (err) {
-    console.error(err);
-  }
+
+      }
+    })
+      
+    } catch (error) {
+      console.log(error);
+    }
+
 }
 
 
