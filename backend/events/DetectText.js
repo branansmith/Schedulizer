@@ -146,8 +146,6 @@ async function detectText(photoName) {
         }
         
       }
-      
-
 
       }
     })
