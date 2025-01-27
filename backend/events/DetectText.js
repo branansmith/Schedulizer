@@ -75,6 +75,7 @@ async function detectText(photoName) {
     const res = await client.detectDocumentText(params).promise();
     //console.log the type of block, text, text type, and confidence
     let weekFilled = 0;
+    let personsFilled = 0;
     const person = {};
       person.name;
       person.sundayTime;
@@ -102,6 +103,8 @@ async function detectText(photoName) {
         let timeFrame = [];
         let time;
         if(isTimeFrame.test(block.Text)) {
+          console.log(block.Text);
+          console.log(block.Geometry.BoundingBox);
           timeFrame = block.Text.split(" ");
           if (timeFrame[0] != undefined && timeFrame[2] != undefined) {
             time = timeFrame[0] + " - " + timeFrame[2];
@@ -113,7 +116,7 @@ async function detectText(photoName) {
           } else {
             time = block.Text;
           }
-        //console.log(`Text: ${block.Text}`)
+
         if(!needSecondTime) {
         weekFilled++;
         switch (weekFilled) {
@@ -141,10 +144,19 @@ async function detectText(photoName) {
           case 8:
             person.name = block.Text;
             console.log(person);
+            personsFilled++;
             weekFilled = 0;
             break;
         }
         
+      }
+
+      //this number represents the amount of employees
+      //in the store
+      //and prevents the textract program from reading more
+      //information than is necessary
+      if (personsFilled == 7) {
+        throw new Error("Schedule Filled");
       }
 
       }
