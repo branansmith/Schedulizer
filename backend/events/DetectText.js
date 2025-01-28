@@ -1,21 +1,7 @@
 //Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
 
-// IMPORTANT WORDS: 01/25 <-- DATES FOR KNOWING WHAT WEEK OF THE CALENDAR IT IS
-// 7:30AM/PM - 9:30AM/PM, OFF, Holiday, R/O
-//month/day/year
-// Dates: 01-12/1-31/1-99 
-
-//to find which days are the important words, sort by y axis, the lower
-// numbers are going to be Sunday, Monday, 
-//the higher numbers are going to be Friday, Saturday
-//once you get the first 7 important words and sort them
-//restart the counter
-//for loop that checks if current iteration is a modulo of 7
-//if it is, then that iteration is the index of the employee
-//so for example, if current iteration is % 7 and current iteration = 7
-//that would be sam because that's the first 7, so sam would = 0, first
-let importantWords = ["R/O", "OFF", "Holiday"]
+let importantWords = ["R/O", "OFF", "Holiday", "PTO"]
 let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan"]
 
 //check against to see if it's a date
@@ -25,10 +11,6 @@ const isTimeFrame = /(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)/
 async function detectText(photoName) {
   // Import AWS
   const AWS = require("aws-sdk")
-  // Use Image-Size to get 
-  const sizeOf = require('image-size');
-  // Image tool to draw buffers
-  const images = require("images");
 
   // Set variables
   var credentials = new AWS.SharedIniFileCredentials({ profile: 'AdminUser' });
@@ -57,19 +39,6 @@ async function detectText(photoName) {
     },
   }
 
-  // Function to display image
-  async function getImage() {
-    const imageData = s3.getObject(
-      {
-        Bucket: bucket,
-        Key: photo
-      }
-
-    ).promise();
-    return imageData;
-  }
-
-
   try {
     // Call API and log response
     const res = await client.detectDocumentText(params).promise();
@@ -85,6 +54,11 @@ async function detectText(photoName) {
       person.thursdayTime;
       person.fridayTime;
       person.saturdayTime;
+      //person.extendTime;
+
+    let storeTime = [];
+    let waitingSecondTime = false;
+
     res.Blocks.forEach(block => {
       
       
@@ -98,26 +72,33 @@ async function detectText(photoName) {
       //extend times throw off the order, as well as not grouping the time 
       //frames, for example sometimes the block.Text only prints a 9:30AM
       //instead of a 9:30AM - 5:30PM
-      let needSecondTime = false;
+      
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
         let timeFrame = [];
         let time;
         if(isTimeFrame.test(block.Text)) {
-          console.log(block.Text);
-          console.log(block.Geometry.BoundingBox);
+          //console.log(block.Text);
+          //console.log(block.Geometry.BoundingBox);
           timeFrame = block.Text.split(" ");
           if (timeFrame[0] != undefined && timeFrame[2] != undefined) {
+            console.log("1st if statement" + block.Text + " " + timeFrame);
             time = timeFrame[0] + " - " + timeFrame[2];
-          } else if (timeFrame[0] != undefined && timeFrame[2] == undefined) {
+          } else if (timeFrame[0] != undefined && timeFrame[1] != undefined && timeFrame[2] == undefined) {
+            console.log("2nd if statement" + block.Text + " " + timeFrame);
               time = timeFrame[0] + " - " + timeFrame[1];
             } else {
-              needSecondTime = true;
+              storeTime.push(block.Text);
+              waitingSecondTime = true;
             }
           } else {
             time = block.Text;
           }
-
-        if(!needSecondTime) {
+        if (storeTime.length == 2) {
+          time = storeTime[0] + " - " + storeTime[1];
+          storeTime = [];
+          waitingSecondTime = false;
+        }
+        if(!waitingSecondTime) {
         weekFilled++;
         switch (weekFilled) {
           case 1:
@@ -148,7 +129,6 @@ async function detectText(photoName) {
             weekFilled = 0;
             break;
         }
-        
       }
 
       //this number represents the amount of employees
