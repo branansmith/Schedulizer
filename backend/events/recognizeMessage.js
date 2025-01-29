@@ -38,7 +38,6 @@ module.exports = {
 				  // Wait for the upload to complete
 				  await uploadToS3(filePath);
 			  
-				  // Now call detectText after a 5-second delay
 				  setTimeout(() => {
 					fs.unlinkSync(filePath);
 					detectText(entry.name);

@@ -54,10 +54,11 @@ async function detectText(photoName) {
       person.thursdayTime;
       person.fridayTime;
       person.saturdayTime;
-      //person.extendTime;
+      person.extendTime;
 
     let storeTime = [];
     let waitingSecondTime = false;
+    let extendTime = false;
 
     res.Blocks.forEach(block => {
       
@@ -77,6 +78,9 @@ async function detectText(photoName) {
         let timeFrame = [];
         let time;
         if(isTimeFrame.test(block.Text)) {
+          if (weekFilled == 7) {
+            extendTime = true;
+          }
           //console.log(block.Text);
           //console.log(block.Geometry.BoundingBox);
           timeFrame = block.Text.split(" ");
@@ -99,7 +103,12 @@ async function detectText(photoName) {
           waitingSecondTime = false;
         }
         if(!waitingSecondTime) {
-        weekFilled++;
+          if (extendTime) {
+            weekFilled = 9;
+          } else {
+            weekFilled++;
+          }
+        
         switch (weekFilled) {
           case 1:
             person.sundayTime = time;
@@ -127,6 +136,11 @@ async function detectText(photoName) {
             console.log(person);
             personsFilled++;
             weekFilled = 0;
+            break;
+          case 9:
+            person.extendTime = block.Text;
+            extendTime = false;
+            weekFilled = 7;
             break;
         }
       }
