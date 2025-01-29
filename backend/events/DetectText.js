@@ -134,6 +134,7 @@ async function detectText(photoName) {
           case 8:
             person.name = block.Text;
             console.log(person);
+            person.extendTime = " ";
             personsFilled++;
             weekFilled = 0;
             break;
