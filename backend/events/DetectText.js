@@ -1,7 +1,7 @@
 //Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
 
-let importantWords = ["R/O", "OFF", "Holiday", "PTO"]
+let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan"]
 
 //check against to see if it's a date
@@ -84,10 +84,10 @@ async function detectText(photoName) {
           //console.log(block.Text);
           //console.log(block.Geometry.BoundingBox);
           timeFrame = block.Text.split(" ");
-          if (timeFrame[0] != undefined && timeFrame[2] != undefined) {
+          if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[2])) {
             console.log("1st if statement" + block.Text + " " + timeFrame);
             time = timeFrame[0] + " - " + timeFrame[2];
-          } else if (timeFrame[0] != undefined && timeFrame[1] != undefined && timeFrame[2] == undefined) {
+          } else if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[1]) && timeFrame[2] == undefined) {
             console.log("2nd if statement" + block.Text + " " + timeFrame);
               time = timeFrame[0] + " - " + timeFrame[1];
             } else {
