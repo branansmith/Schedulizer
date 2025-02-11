@@ -29,6 +29,9 @@ async function detectText(photoName) {
   // Connect to S3 to display image
   const s3 = new AWS.S3();
 
+  var timesScheduled = new Map();
+
+
   // Define paramaters
   const params = {
     Document: {
@@ -44,25 +47,25 @@ async function detectText(photoName) {
     const res = await client.detectDocumentText(params).promise();
     //console.log the type of block, text, text type, and confidence
     let weekFilled = 0;
-    let personsFilled = 0;
-    const person = {};
-      person.name;
-      person.sundayTime;
-      person.mondayTime;
-      person.tuesdayTime;
-      person.wednesdayTime;
-      person.thursdayTime;
-      person.fridayTime;
-      person.saturdayTime;
-      person.extendTime;
+    let employeesFilled = 0;
+    const employee = {};
+    employee.name;
+    employee.sundayTime;
+    employee.mondayTime;
+    employee.tuesdayTime;
+    employee.wednesdayTime;
+    employee.thursdayTime;
+    employee.fridayTime;
+    employee.saturdayTime;
+    employee.extendTime;
 
     let storeTime = [];
     let waitingSecondTime = false;
     let extendTime = false;
 
     res.Blocks.forEach(block => {
-      
-      
+
+
 
 
       //console.log(block.Geometry.BoundingBox);
@@ -73,11 +76,11 @@ async function detectText(photoName) {
       //extend times throw off the order, as well as not grouping the time 
       //frames, for example sometimes the block.Text only prints a 9:30AM
       //instead of a 9:30AM - 5:30PM
-      
+
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
         let timeFrame = [];
         let time;
-        if(isTimeFrame.test(block.Text)) {
+        if (isTimeFrame.test(block.Text)) {
           if (weekFilled == 7) {
             extendTime = true;
           }
@@ -85,81 +88,114 @@ async function detectText(photoName) {
           //console.log(block.Geometry.BoundingBox);
           timeFrame = block.Text.split(" ");
           if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[2])) {
-            console.log("1st if statement" + block.Text + " " + timeFrame);
             time = timeFrame[0] + " - " + timeFrame[2];
           } else if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[1]) && timeFrame[2] == undefined) {
-            console.log("2nd if statement" + block.Text + " " + timeFrame);
-              time = timeFrame[0] + " - " + timeFrame[1];
-            } else {
-              storeTime.push(block.Text);
-              waitingSecondTime = true;
-            }
+            time = timeFrame[0] + " - " + timeFrame[1];
           } else {
-            time = block.Text;
+            storeTime.push(block.Text);
+            waitingSecondTime = true;
           }
+        } else {
+          time = block.Text;
+        }
         if (storeTime.length == 2) {
           time = storeTime[0] + " - " + storeTime[1];
           storeTime = [];
           waitingSecondTime = false;
         }
-        if(!waitingSecondTime) {
+        if (!waitingSecondTime) {
           if (extendTime) {
             weekFilled = 9;
           } else {
             weekFilled++;
           }
-        
-        switch (weekFilled) {
-          case 1:
-            person.sundayTime = time;
-            break;
-          case 2:
-            person.mondayTime = time;
-            break;
-          case 3:
-            person.tuesdayTime = time;
-            break;
-          case 4:
-            person.wednesdayTime = time;
-            break;
-          case 5:
-            person.thursdayTime = time;
-            break;
-          case 6:
-            person.fridayTime = time;
-            break;
-          case 7:
-            person.saturdayTime = time;
-            break;
-          case 8:
-            person.name = block.Text;
-            console.log(person);
-            person.extendTime = " ";
-            personsFilled++;
-            weekFilled = 0;
-            break;
-          case 9:
-            person.extendTime = block.Text;
-            extendTime = false;
-            weekFilled = 7;
-            break;
-        }
-      }
 
-      //this number represents the amount of employees
-      //in the store
-      //and prevents the textract program from reading more
-      //information than is necessary
-      if (personsFilled == 7) {
-        throw new Error("Schedule Filled");
-      }
+          switch (weekFilled) {
+            case 1:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 2:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 3:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 4:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 5:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 6:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 7:
+              timesScheduled.set(block.Geometry.BoundingBox.Left, time);
+              break;
+            case 8:
+              timesScheduled = new Map([...timesScheduled.entries()].sort());
+              //console.log(timesScheduled);
+              var dayOfWeek = 0;
+              for (let [key, value] of timesScheduled) {
+                switch (dayOfWeek) {
+                  case 0:
+                    employee.sundayTime = value;
+                    break;
+                  case 1:
+                    employee.mondayTime = value;
+                    break;
+                  case 2:
+                    employee.tuesdayTime = value;
+                    break;
+                  case 3:
+                    employee.wednesdayTime = value;
+                    break;
+                  case 4:
+                    employee.thursdayTime = value;
+                    break;
+                  case 5:
+                    employee.fridayTime = value;
+                    break;
+                  case 6:
+                    employee.saturdayTime = value;
+                    break;
+                }
+                dayOfWeek++;
+              }
+              
+
+              timesScheduled.clear();
+
+              employee.name = block.Text;
+
+              //employee completely filled at this point
+              console.log(employee);
+              employee.extendTime = " ";
+              employeesFilled++;
+              weekFilled = 0;
+              break;
+            case 9:
+              employee.extendTime = block.Text;
+              extendTime = false;
+              weekFilled = 7;
+              break;
+          }
+        }
+
+        //this number represents the amount of employees
+        //in the store
+        //and prevents the textract program from reading more
+        //information than is necessary
+        if (employeesFilled == 7) {
+          throw new Error("Schedule Filled");
+        }
 
       }
     })
-      
-    } catch (error) {
-      console.log(error);
-    }
+
+  } catch (error) {
+    console.log(error);
+  }
 
 }
 
