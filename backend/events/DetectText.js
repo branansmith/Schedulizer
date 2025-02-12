@@ -19,15 +19,8 @@ async function detectText(photoName) {
   const bucket = 'canyouseeme15' // the s3 bucket name
   const photo = photoName // the name of file
 
-  // Create a canvas and get the context
-  const { createCanvas } = require('canvas')
-  const canvas = createCanvas(200, 200)
-  const ctx = canvas.getContext('2d')
-
   // Connect to Textract
   const client = new AWS.Textract();
-  // Connect to S3 to display image
-  const s3 = new AWS.S3();
 
   var timesScheduled = new Map();
 
@@ -63,19 +56,24 @@ async function detectText(photoName) {
     let waitingSecondTime = false;
     let extendTime = false;
 
+    let dateFound = false;
+    var startDate = "";
+
     res.Blocks.forEach(block => {
 
 
+      if (!dateFound && block.Text != undefined) {
+        let startOfWeek = [];
+        startOfWeek = block.Text.split(" ");
+        if (regex.test(startOfWeek[1])) {
+          startDate = startOfWeek[1];
+          console.log(startDate);
+          dateFound = true;
+        }
+       
+      }
 
-
-      //console.log(block.Geometry.BoundingBox);
-      //console.log(`Confidence: ${block.Confidence}`)
-      //regex.test(block.Text) checks if date
-
-      //extend times come after all other times
-      //extend times throw off the order, as well as not grouping the time 
-      //frames, for example sometimes the block.Text only prints a 9:30AM
-      //instead of a 9:30AM - 5:30PM
+      
 
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
         let timeFrame = [];
@@ -84,8 +82,7 @@ async function detectText(photoName) {
           if (weekFilled == 7) {
             extendTime = true;
           }
-          //console.log(block.Text);
-          //console.log(block.Geometry.BoundingBox);
+
           timeFrame = block.Text.split(" ");
           if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[2])) {
             time = timeFrame[0] + " - " + timeFrame[2];
