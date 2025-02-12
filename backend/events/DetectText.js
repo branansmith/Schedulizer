@@ -5,7 +5,7 @@ let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan"]
 
 //check against to see if it's a date
-const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
+const isDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
 const isTimeFrame = /(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)/
 
 async function detectText(photoName) {
@@ -65,7 +65,7 @@ async function detectText(photoName) {
       if (!dateFound && block.Text != undefined) {
         let startOfWeek = [];
         startOfWeek = block.Text.split(" ");
-        if (regex.test(startOfWeek[1])) {
+        if (isDate.test(startOfWeek[1])) {
           startDate = startOfWeek[1];
           console.log(startDate);
           dateFound = true;
