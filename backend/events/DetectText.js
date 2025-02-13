@@ -23,7 +23,7 @@ async function detectText(photoName) {
   const client = new AWS.Textract();
 
   var timesScheduled = new Map();
-
+  var extendTimes = new Map();
 
   // Define paramaters
   const params = {
@@ -43,14 +43,27 @@ async function detectText(photoName) {
     let employeesFilled = 0;
     const employee = {};
     employee.name;
+
     employee.sundayTime;
+    employee.sundayExtendTime;
+
     employee.mondayTime;
+    employee.mondayExtendTime;
+
     employee.tuesdayTime;
+    employee.tuesdayExtendTime;
+
     employee.wednesdayTime;
+    employee.wednesdayExtendTime;
+
     employee.thursdayTime;
+    employee.thursdayExtendTime;
+
     employee.fridayTime;
+    employee.fridayExtendTime;
+
     employee.saturdayTime;
-    employee.extendTime;
+    employee.saturdayExtendTime;
 
     let storeTime = [];
     let waitingSecondTime = false;
@@ -61,23 +74,27 @@ async function detectText(photoName) {
 
     res.Blocks.forEach(block => {
 
-
+      //finds week date of schedule
       if (!dateFound && block.Text != undefined) {
         let startOfWeek = [];
         startOfWeek = block.Text.split(" ");
         if (isDate.test(startOfWeek[1])) {
           startDate = startOfWeek[1];
-          console.log(startDate);
           dateFound = true;
         }
        
       }
 
       
-
+      //starts with deciding if the current block.Text is an important word
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
         let timeFrame = [];
         let time;
+
+        //if it's a time, such as 9:00AM - 5:00PM
+        //it begins formatting, ensuring nothing is left out
+
+        //EXTEND TIME IS ALWAYS LAST VALUE
         if (isTimeFrame.test(block.Text)) {
           if (weekFilled == 7) {
             extendTime = true;
@@ -107,6 +124,9 @@ async function detectText(photoName) {
             weekFilled++;
           }
 
+          //after the time has been formatted
+          //it adds the time to a map
+          //with a bounding box value to be sorted later
           switch (weekFilled) {
             case 1:
               timesScheduled.set(block.Geometry.BoundingBox.Left, time);
@@ -130,10 +150,31 @@ async function detectText(photoName) {
               timesScheduled.set(block.Geometry.BoundingBox.Left, time);
               break;
             case 8:
+              //sorts the map
               timesScheduled = new Map([...timesScheduled.entries()].sort());
-              //console.log(timesScheduled);
               var dayOfWeek = 0;
               for (let [key, value] of timesScheduled) {
+                
+
+                //after the map is sorted, it fills in the values
+                //for the employee class
+
+                //put extend time days here
+                if (extendTimes.size > 0) {
+                  for (let [extendTime, extendGeometry] of extendTimes) {
+                    var dayOfWeek = 0;
+                    for (let [timeGeometry, time] of timesScheduled) {
+                      
+                      //console.log("Extend geometry: " + extendGeometry);
+                      //console.log("Time geometry: " + timeGeometry);
+                      if (Math.abs(extendGeometry - timeGeometry < 0.03)) {
+                        extendTimes.set(extendTime, dayOfWeek);
+                      }
+                      dayOfWeek++;
+                    }
+                  }
+                }
+
                 switch (dayOfWeek) {
                   case 0:
                     employee.sundayTime = value;
@@ -159,20 +200,62 @@ async function detectText(photoName) {
                 }
                 dayOfWeek++;
               }
-              
 
+              for (let [time, day] of extendTimes) {
+
+                switch (day) {
+                  case 0:
+                    employee.sundayExtendTime = time;
+                    break;
+                  case 1:
+                    employee.mondayExtendTime = time;
+                    break;
+                  case 2:
+                    employee.tuesdayExtendTime = time;
+                    break;
+                  case 3:
+                    employee.wednesdayExtendTime = time;
+                    break;
+                  case 4:
+                    employee.thursdayExtendTime = time;
+                    break;
+                  case 5:
+                    employee.fridayExtendTime = time;
+                    break;
+                  case 6:
+                    employee.saturdayExtendTime = time;
+                    break;
+                }
+              }
+
+              if (extendTimes.size == 0) {
+                employee.sundayExtendTime = undefined;
+                employee.mondayExtendTime = undefined;
+                employee.tuesdayExtendTime = undefined;
+                employee.wednesdayExtendTime = undefined;
+                employee.thursdayExtendTime = undefined;
+                employee.fridayExtendTime = undefined;
+                employee.saturdayExtendTime = undefined;
+              }
+
+              extendTimes.clear();
+              
+              //clears map so that 
+              //the next employee
+              //will have organized times by day of week
               timesScheduled.clear();
 
               employee.name = block.Text;
 
               //employee completely filled at this point
               console.log(employee);
-              employee.extendTime = " ";
               employeesFilled++;
               weekFilled = 0;
               break;
             case 9:
-              employee.extendTime = block.Text;
+              //sets extend time
+              //employee.mondayExtendTime = block.Text;
+              extendTimes.set(block.Text, block.Geometry.BoundingBox.Left);
               extendTime = false;
               weekFilled = 7;
               break;
