@@ -82,10 +82,10 @@ async function detectText(photoName) {
           startDate = startOfWeek[1];
           dateFound = true;
         }
-       
+
       }
 
-      
+
       //starts with deciding if the current block.Text is an important word
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
         let timeFrame = [];
@@ -152,28 +152,32 @@ async function detectText(photoName) {
             case 8:
               //sorts the map
               timesScheduled = new Map([...timesScheduled.entries()].sort());
+
               var dayOfWeek = 0;
+              var extendTimesRemaining = extendTimes.size;
+
+              //finds extend time days
+              if (extendTimesRemaining != 0) {
+                for (let [extendTime, extendGeometry] of extendTimes) {
+                  var extendDay = 0;
+                  for (let [timeGeometry, time] of timesScheduled) {
+
+                    //console.log("Extend geometry: " + extendGeometry);
+                    //console.log("Time geometry: " + timeGeometry);
+                    if (Math.abs(extendGeometry - timeGeometry < 0.03)) {
+                      extendTimes.set(extendTime, extendDay);
+                      extendTimesRemaining--;
+                    }
+                    extendDay++;
+                  }
+                }
+              }
+
+              //
               for (let [key, value] of timesScheduled) {
-                
 
                 //after the map is sorted, it fills in the values
                 //for the employee class
-
-                //put extend time days here
-                if (extendTimes.size > 0) {
-                  for (let [extendTime, extendGeometry] of extendTimes) {
-                    var dayOfWeek = 0;
-                    for (let [timeGeometry, time] of timesScheduled) {
-                      
-                      //console.log("Extend geometry: " + extendGeometry);
-                      //console.log("Time geometry: " + timeGeometry);
-                      if (Math.abs(extendGeometry - timeGeometry < 0.03)) {
-                        extendTimes.set(extendTime, dayOfWeek);
-                      }
-                      dayOfWeek++;
-                    }
-                  }
-                }
 
                 switch (dayOfWeek) {
                   case 0:
@@ -239,7 +243,7 @@ async function detectText(photoName) {
               }
 
               extendTimes.clear();
-              
+
               //clears map so that 
               //the next employee
               //will have organized times by day of week
