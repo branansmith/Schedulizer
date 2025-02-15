@@ -2,6 +2,8 @@
 //PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
 
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
+
+//ALL EMPLOYEES SHOWN ON THE SCHEDULE MUST BE IN THIS ARRAY
 let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan"]
 
 //check against to see if it's a date
@@ -270,7 +272,13 @@ async function detectText(photoName) {
         //in the store
         //and prevents the textract program from reading more
         //information than is necessary
-        if (employeesFilled == 7) {
+
+        //for some reason, Amazon Textract
+        //goes back over the entire photo
+        //so this is needed
+
+        //throwing this error does not stop the bot
+        if (employeesFilled == employees.length) {
           throw new Error("Schedule Filled");
         }
 
