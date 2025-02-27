@@ -1,5 +1,8 @@
 //Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
+const run = require("../database/Database.js")
+
+run();
 
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 
@@ -73,20 +76,32 @@ async function detectText(photoName) {
 
     let dateFound = false;
     var startDate = "";
+    let dates = [];
 
     res.Blocks.forEach(block => {
 
       //finds week date of schedule
+      //sets all dates for current week
       if (!dateFound && block.Text != undefined) {
         let startOfWeek = [];
         startOfWeek = block.Text.split(" ");
         if (isDate.test(startOfWeek[1])) {
           startDate = startOfWeek[1];
+          var date = new Date(startDate);
+        for (let i = 0; i < 7; ++i) {
+          const mm = String(date.getMonth()).padStart(2, '0');
+          const dd = String(date.getDate()).padStart(2, '0');
+          const yy = String(date.getFullYear()).slice(-2);
+          const formattedDate = `${mm}/${dd}/${yy}`;
+
+          dates.push(formattedDate);
+          date.setDate(date.getDate() + 1);
+        }
+
           dateFound = true;
         }
 
       }
-
 
       //starts with deciding if the current block.Text is an important word
       if (importantWords.includes(block.Text) || isTimeFrame.test(block.Text) || employees.includes(block.Text)) {
@@ -279,6 +294,10 @@ async function detectText(photoName) {
 
         //throwing this error does not stop the bot
         if (employeesFilled == employees.length) {
+          for (let i = 0; i < dates.length; ++i) {
+            console.log(dates[i]);
+          }
+          dates.clear();
           throw new Error("Schedule Filled");
         }
 

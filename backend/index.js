@@ -6,6 +6,7 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 
+
 //intents which allow the bot to view message content and get messages
 const client = new Client({ 
 	intents: 
