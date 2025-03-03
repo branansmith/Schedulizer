@@ -13,6 +13,17 @@ let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan"]
 const isDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
 const isTimeFrame = /(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)/
 
+let employeeTimes = new Map();
+
+let sundayExtendTimes = new Map();
+let mondayExtendTimes = new Map();
+let tuesdayExtendTimes = new Map();
+let wednesdayExtendTimes = new Map();
+let thursdayExtendTimes = new Map();
+let fridayExtendTimes = new Map();
+let saturdayExtendTimes = new Map();
+
+
 async function detectText(photoName) {
   // Import AWS
   const AWS = require("aws-sdk")
@@ -95,6 +106,30 @@ async function detectText(photoName) {
           const formattedDate = `${mm}/${dd}/${yy}`;
 
           dates.push(formattedDate);
+
+          switch (i) {
+            case 0:
+              employeeTimes.set(formattedDate, []);
+              break;
+            case 1:
+              employeeTimes.set(formattedDate, []);
+              break;
+            case 2:
+              employeeTimes.set(formattedDate, []);
+              break;
+            case 3:
+              employeeTimes.set(formattedDate, []);
+              break;
+            case 4:
+              employeeTimes.set(formattedDate, []);
+              break;
+            case 5:
+              employeeTimes.set(formattedDate, []);
+              break;
+            case 6:
+              employeeTimes.set(formattedDate, []);
+              break;
+          }
           date.setDate(date.getDate() + 1);
         }
 
@@ -268,6 +303,13 @@ async function detectText(photoName) {
 
               employee.name = block.Text;
 
+
+              //push into hashmap here
+              //what do I do about extend times?
+              //think about the design of the calender
+              //for the website
+              employeeTimes.get(dates[0]).push(employee.sundayTime);
+
               //employee completely filled at this point
               console.log(employee);
               employeesFilled++;
@@ -294,10 +336,8 @@ async function detectText(photoName) {
 
         //throwing this error does not stop the bot
         if (employeesFilled == employees.length) {
-          for (let i = 0; i < dates.length; ++i) {
-            console.log(dates[i]);
-          }
-          dates.clear();
+
+          console.log(employeeTimes.keys());
           throw new Error("Schedule Filled");
         }
 
