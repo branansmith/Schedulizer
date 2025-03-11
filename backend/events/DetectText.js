@@ -353,6 +353,9 @@ async function detectText(photoName) {
               //converts map to documents
               //so that it can be inserted into database
 
+              //this successfully inserts documents into the
+              //database, but it inserts it multiple
+              //times, PRIORITY
               const documents = Array.from(employeeTimes, ([_id, employees]) => ({
                 _id,
                 employees
