@@ -1,8 +1,15 @@
 //Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
-const run = require("../database/Database.js")
 
-run();
+const database = require("../database/Database");
+
+
+//if this ever gets an error, go to mongodb website
+// and add ip address
+database.run();
+
+//causes bug when run now
+
 
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 
@@ -98,14 +105,16 @@ async function detectText(photoName) {
         startOfWeek = block.Text.split(" ");
         if (isDate.test(startOfWeek[1])) {
           startDate = startOfWeek[1];
+
           var date = new Date(startDate);
         for (let i = 0; i < 7; ++i) {
-          const mm = String(date.getMonth()).padStart(2, '0');
+          const mm = String(date.getMonth() + 1).padStart(2, '0');
           const dd = String(date.getDate()).padStart(2, '0');
           const yy = String(date.getFullYear()).slice(-2);
           const formattedDate = `${mm}/${dd}/${yy}`;
 
           dates.push(formattedDate);
+          
 
           switch (i) {
             case 0:
@@ -308,9 +317,51 @@ async function detectText(photoName) {
               //what do I do about extend times?
               //think about the design of the calender
               //for the website
-              employeeTimes.get(dates[0]).push(employee.sundayTime);
+              employeeTimes.get(dates[0]).push(employee.name + ": " + employee.sundayTime);
+              employeeTimes.get(dates[1]).push(employee.name + ": " + employee.mondayTime);
+              employeeTimes.get(dates[2]).push(employee.name + ": " + employee.tuesdayTime);
+              employeeTimes.get(dates[3]).push(employee.name + ": " + employee.wednesdayTime);
+              employeeTimes.get(dates[4]).push(employee.name + ": " + employee.thursdayTime);
+              employeeTimes.get(dates[5]).push(employee.name + ": " + employee.fridayTime);
+              employeeTimes.get(dates[6]).push(employee.name + ": " + employee.saturdayTime);
+
+              //extend times?
+                if (employee.sundayExtendTime != undefined) {
+                  employeeTimes.get(dates[0]).push("EXTEND " + employee.name + ": " + employee.sundayExtendTime);
+                }
+                if (employee.mondaydayExtendTime != undefined) {
+                  employeeTimes.get(dates[1]).push("EXTEND " + employee.name + ": " + employee.mondayExtendTime);
+                }
+                if (employee.tuesdayExtendTime != undefined) {
+                  employeeTimes.get(dates[2]).push("EXTEND " + employee.name + ": " + employee.tuesdayExtendTime);
+                }
+                if (employee.wednesdayExtendTime != undefined) {
+                  employeeTimes.get(dates[3]).push("EXTEND " + employee.name + ": " + employee.wednesdayExtendTime);
+                }
+                if (employee.thursdayExtendTime != undefined) {
+                  employeeTimes.get(dates[4]).push("EXTEND " + employee.name + ": " + employee.thursdayExtendTime);
+                }
+                if (employee.fridayExtendTime != undefined) {
+                  employeeTimes.get(dates[5]).push("EXTEND " + employee.name + ": " + employee.fridayExtendTime);
+                }
+                if (employee.saturdayExtendTime != undefined) {
+                  employeeTimes.get(dates[6]).push("EXTEND " + employee.name + ": " + employee.saturdayExtendTime);
+                }
 
               //employee completely filled at this point
+
+              //converts map to documents
+              //so that it can be inserted into database
+
+              const documents = Array.from(employeeTimes, ([_id, employees]) => ({
+                _id,
+                employees
+              }));
+              database.insertDocument(documents, (err, res) => {
+                if(err) throw err;
+                console.log(`${res.insertedCount} documents inserted`);
+              });
+
               console.log(employee);
               employeesFilled++;
               weekFilled = 0;
@@ -336,8 +387,10 @@ async function detectText(photoName) {
 
         //throwing this error does not stop the bot
         if (employeesFilled == employees.length) {
-
-          console.log(employeeTimes.keys());
+          
+          employeeTimes.forEach((value, key) => {
+            console.log(`Key: ${key}, Value: ${value}`);
+          })
           throw new Error("Schedule Filled");
         }
 
@@ -349,6 +402,7 @@ async function detectText(photoName) {
   }
 
 }
+
 
 
 
