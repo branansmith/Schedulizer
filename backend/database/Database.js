@@ -29,14 +29,24 @@ async insertDocument(document) {
     const database = client.db("Schedulizer");
     const collection = database.collection("ScheduleData");
 
-    const result = await collection.insertMany(document);
-    console.log(`Inserted document with _id: ${result.insertedIds}`);
+    // Iterate over each document in the array and perform upsert (insert or update)
+    const operations = document.map(doc => {
+      return {
+        updateOne: {
+          filter: { _id: doc._id }, // Match by _id to find existing document
+          update: { $set: doc }, // Update the document with the new data
+          upsert: true // If no document is found, it will insert a new one
+        }
+      };
+    });
 
+    const result = await collection.bulkWrite(operations);
+    console.log(`${result.upsertedCount} documents inserted, ${result.modifiedCount} documents updated`);
   } catch (error) {
     console.log(error);
   }
-
 }
+
 
 };
 

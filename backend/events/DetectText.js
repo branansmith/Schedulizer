@@ -8,9 +8,6 @@ const database = require("../database/Database");
 // and add ip address
 database.run();
 
-//causes bug when run now
-
-
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 
 //ALL EMPLOYEES SHOWN ON THE SCHEDULE MUST BE IN THIS ARRAY
@@ -21,14 +18,6 @@ const isDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
 const isTimeFrame = /(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)/
 
 let employeeTimes = new Map();
-
-let sundayExtendTimes = new Map();
-let mondayExtendTimes = new Map();
-let tuesdayExtendTimes = new Map();
-let wednesdayExtendTimes = new Map();
-let thursdayExtendTimes = new Map();
-let fridayExtendTimes = new Map();
-let saturdayExtendTimes = new Map();
 
 
 async function detectText(photoName) {
@@ -356,14 +345,14 @@ async function detectText(photoName) {
               //this successfully inserts documents into the
               //database, but it inserts it multiple
               //times, PRIORITY
+              //also need to edit it so that when this is
+              //inserted and it finds an id that's already in there
+              //it overrides it
               const documents = Array.from(employeeTimes, ([_id, employees]) => ({
                 _id,
                 employees
               }));
-              database.insertDocument(documents, (err, res) => {
-                if(err) throw err;
-                console.log(`${res.insertedCount} documents inserted`);
-              });
+              database.insertDocument(documents);
 
               console.log(employee);
               employeesFilled++;
@@ -390,10 +379,6 @@ async function detectText(photoName) {
 
         //throwing this error does not stop the bot
         if (employeesFilled == employees.length) {
-          
-          employeeTimes.forEach((value, key) => {
-            console.log(`Key: ${key}, Value: ${value}`);
-          })
           throw new Error("Schedule Filled");
         }
 
