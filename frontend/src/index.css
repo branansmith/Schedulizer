@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  justify-content: center;     
+
+}
+
+button {
+  display: flex;
+  margin: 28px;
+}
+
+* {
+  font-family: Soleil, sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  width: calc(100% / 7);
+}
+
+.table-container {
+  width: 100%;
+  border-bottom: 1px solid black;
+}
+
+.calendar-container {
+  /*border: 1px solid black;*/
+  height: 88vh;
+}
+
+.calendar-headers {
+  border: 1px solid black;
+}
+
+th.calendar-day-names {
+  border-right: 1px solid black;
+}
+
+.calendar {
+  width: 100%;
+}
+
+.calendar-day {
+  height: calc(85vh / 4);
+}
+
+td {
+  border: 1px solid black;
+}

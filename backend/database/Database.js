@@ -33,9 +33,9 @@ async insertDocument(document) {
     const operations = document.map(doc => {
       return {
         updateOne: {
-          filter: { _id: doc._id }, // Match by _id to find existing document
-          update: { $set: doc }, // Update the document with the new data
-          upsert: true // If no document is found, it will insert a new one
+          filter: { _id: doc._id },
+          update: { $set: doc },
+          upsert: true 
         }
       };
     });
