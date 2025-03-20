@@ -19,6 +19,7 @@ table {
 
 th {
   width: calc(100% / 7);
+  color: hsl(0,0%, 18%);
 }
 
 .table-container {
@@ -49,4 +50,47 @@ th.calendar-day-names {
 
 td {
   border: 1px solid black;
+}
+
+.day-number {
+  text-align: right;
+  padding: 10px;
+  margin: 0;
+  color: hsl(0,0%,60%);
+}
+
+td:hover {
+  background-color: hsl(0, 0%, 80%);
+}
+
+.employee-name {
+ font-size: 14px;
+ color: hsl(0, 0%, 40%);
+}
+
+.employee-time {
+  font-size: 16px;
+  color: hsl(0,0%, 20%);
+}
+
+
+
+.employee-container {
+  width: 100%;
+  border: 1px solid hsl(0,0, 80%);
+  border-radius: 10px;
+  background-color: hsl(0,0,40%);
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+
+}
+
+.employee-name, .employee-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin: 0;
+
 }
