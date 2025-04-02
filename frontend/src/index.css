@@ -1,12 +1,26 @@
-.container {
-  display: flex;
-  justify-content: center;     
-
+.calendar-title {
+  font-size: 22px;
 }
 
-button {
+.calendar-title-container {
+  height: 8vh;
+  border-bottom: 0px;
   display: flex;
-  margin: 28px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.calendar-title-box {
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 3px;
+  width: 23%;
+}
+
+.month-button {
+  display: flex;
+  margin: 25px;
 }
 
 * {
@@ -15,6 +29,7 @@ button {
 
 table {
   border-collapse: collapse;
+  width: 100%;
 }
 
 th {
@@ -28,12 +43,12 @@ th {
 }
 
 .calendar-container {
-  /*border: 1px solid black;*/
-  height: 88vh;
+  height: 83.5vh;
 }
 
 .calendar-headers {
   border: 1px solid black;
+  font-size: 20px;
 }
 
 th.calendar-day-names {
@@ -45,7 +60,11 @@ th.calendar-day-names {
 }
 
 .calendar-day {
-  height: calc(85vh / 4);
+  height: calc(56vh / 4);
+  width: 100%;
+  display: block;
+  text-align: left;
+
 }
 
 td {
@@ -54,7 +73,7 @@ td {
 
 .day-number {
   text-align: right;
-  padding: 10px;
+  padding: 5px;
   margin: 0;
   color: hsl(0,0%,60%);
 }
@@ -64,33 +83,33 @@ td:hover {
 }
 
 .employee-name {
- font-size: 14px;
- color: hsl(0, 0%, 40%);
+ color: hsl(0, 0%, 0%);
+}
+
+.employee-name .employee-time {
+  font-size: 12px;
+}
+
+.employee-and-time {
+  margin-bottom: 20px;
+  margin-right: 5px;
 }
 
 .employee-time {
-  font-size: 16px;
-  color: hsl(0,0%, 20%);
+  color: hsl(0, 0%, 40%);
 }
 
-
-
 .employee-container {
-  width: 100%;
-  border: 1px solid hsl(0,0, 80%);
-  border-radius: 10px;
-  background-color: hsl(0,0,40%);
-  display: flex;
-  flex-direction: column;
-  padding: 15px;
-
+  height: 73%;
+  overflow: hidden;
+  /*background-color: hsl(0, 0%, 40%);*/
+  margin-left: 8px;
 }
 
 .employee-name, .employee-time {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   width: 100%;
   margin: 0;
-
 }
+

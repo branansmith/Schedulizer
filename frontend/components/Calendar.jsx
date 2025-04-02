@@ -1,5 +1,7 @@
 import CalendarDay from './CalendarDay';
 
+const seven = 20;
+
 function Calendar() {
     return (
         <>
@@ -13,6 +15,24 @@ function Calendar() {
                         <th className="calendar-day-names">Thursday</th>
                         <th className="calendar-day-names">Friday</th>
                         <th>Saturday</th>
+                    </tr>
+                    <tr className="first-week">
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                    </tr>
+                    <tr className="first-week">
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
+                        <td><CalendarDay/></td>
                     </tr>
                     <tr className="first-week">
                         <td><CalendarDay/></td>
