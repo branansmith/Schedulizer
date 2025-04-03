@@ -78,9 +78,6 @@ td {
   color: hsl(0,0%,60%);
 }
 
-td:hover {
-  background-color: hsl(0, 0%, 80%);
-}
 
 .employee-name {
  color: hsl(0, 0%, 0%);
@@ -91,7 +88,7 @@ td:hover {
 }
 
 .employee-and-time {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   margin-right: 5px;
 }
 
@@ -101,15 +98,42 @@ td:hover {
 
 .employee-container {
   height: 73%;
-  overflow: hidden;
+  overflow-y: auto;
   /*background-color: hsl(0, 0%, 40%);*/
   margin-left: 8px;
+  overflow-x: hidden;
 }
 
 .employee-name, .employee-time {
   white-space: nowrap;
-  overflow: hidden;
   width: 100%;
   margin: 0;
 }
+
+
+
+/* Targeting the scrollbar */
+.employee-container::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Styling the scrollbar track (background of the scrollbar) */
+.employee-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1; 
+
+}
+
+/* Styling the scrollbar thumb (the draggable part) */
+.employee-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+
+}
+
+/* On hover, you can change the thumb color to make it more noticeable */
+.employee-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+
+}
+
 
