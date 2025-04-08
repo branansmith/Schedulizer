@@ -20,7 +20,7 @@
 
 .month-button {
   display: flex;
-  margin: 25px;
+  margin: 28px;
 }
 
 * {
@@ -72,10 +72,14 @@ td {
 }
 
 .day-number {
+  font-size: 16px;
   text-align: right;
   padding: 5px;
-  margin: 0;
-  color: hsl(0,0%,60%);
+  margin-right: 0px;
+  margin-bottom: 5px;
+  margin-left: 0;
+  margin-top: 0;
+  color: hsl(0,0%,0%);
 }
 
 
@@ -88,7 +92,7 @@ td {
 }
 
 .employee-and-time {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   margin-right: 5px;
 }
 

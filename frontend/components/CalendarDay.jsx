@@ -1,10 +1,10 @@
 import EmployeeContainer from './EmployeeContainer';
 
-function CalendarDay() {
+function CalendarDay({day}) {
     return(
         <>
             <div className="calendar-day">
-                <p className = "day-number">1</p>
+                <p className = "day-number">{day}</p>
                 <EmployeeContainer/>
             </div>
         </>
