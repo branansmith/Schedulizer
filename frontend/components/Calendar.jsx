@@ -1,12 +1,11 @@
 import CalendarDay from './CalendarDay';
-import { useCalendarTitle } from './CalendarTitleContext';
 
 
 const totalCalendarDays = 42;
 
 function Calendar() {
-
-    const title = useCalendarTitle();
+    
+    
     const days = Array.from({ length: totalCalendarDays }, (_, i) => i + 1);
 
     const rows = [];
