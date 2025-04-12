@@ -7,7 +7,8 @@ function CalendarTitle() {
   // Initialize the month and year based on the current date
   const [monthName, setMonth] = useState(currentDate.toLocaleString('default', { month: 'long' }));
   const [year, setYear] = useState(currentDate.getFullYear());
-  const { title, incrementMonth, decrementMonth, getFirstDayOfMonth } = useCalendarTitle();
+  const { title, incrementMonth, decrementMonth, getFirstDayOfMonth, getLastDayOfMonth } = useCalendarTitle();
+
 
   return (
     <>
@@ -17,11 +18,7 @@ function CalendarTitle() {
         <div className="calendar-title-box">
           <h3 className="calendar-title">{title}</h3>
         </div>
-        <button className="month-button" onClick={() => {
-          incrementMonth();
-          console.log(getFirstDayOfMonth());
-          
-          }}>&gt;</button>
+        <button className="month-button" onClick={() => incrementMonth()}>&gt;</button>
       </div>
     </>
   );

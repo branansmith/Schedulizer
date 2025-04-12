@@ -28,12 +28,20 @@ export const CalendarTitleProvider = ({ children }) => {
     return { month: monthNames.indexOf(month), year: parseInt(year, 10) };
   };
 
+
   // Function to get the first day of the month from the title
   const getFirstDayOfMonth = () => {
     const { month, year } = getMonthYearFromTitle(title); // Get current month and year from state
     const firstDay = new Date(year, month, 1); // Get the first day of the month
-    return firstDay.getDay(); // Return the weekday (0 = Sunday, 1 = Monday, etc.)
+    return firstDay.getDay();
   };
+
+  //used for knowing when to stop adding employee data
+  const getLastDayOfMonth = () => {
+    const { month, year } = getMonthYearFromTitle(title); // Get current month and year from state
+    const lastDay = new Date(year, month + 1, -1);
+    return lastDay.getDate();
+  }
 
   // Function to increment the month
   const incrementMonth = () => {
@@ -55,7 +63,8 @@ export const CalendarTitleProvider = ({ children }) => {
       setTitle, 
       incrementMonth, 
       decrementMonth, 
-      getFirstDayOfMonth // Expose the function
+      getFirstDayOfMonth,
+      getLastDayOfMonth
     }}>
       {children}
     </CalendarTitleContext.Provider>
