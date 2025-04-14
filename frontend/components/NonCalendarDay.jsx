@@ -5,7 +5,7 @@ function NonCalendarDay({day}) {
         <>
             <div className="non-calendar-day">
                 <p className = "day-number">{day}</p>
-               
+                <EmployeeContainer/>
             </div>
         </>
     )

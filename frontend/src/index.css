@@ -140,4 +140,12 @@ td {
 
 }
 
+.non-calendar-day {
+  height: calc(56vh / 4);
+  width: 100%;
+  display: block;
+  text-align: left;
+  visibility: hidden;
+}
+
 

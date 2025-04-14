@@ -43,9 +43,7 @@ function Calendar() {
                             <th className="calendar-day-names">Saturday</th>
                         </tr>
                     </thead>
-                    <tbody> {/* if index == firstDay, firstDayNotFound = false
-                                if (firstDayNotFound) map prev month day
-                    */}
+                    <tbody>
                         {rows.map((week, index) => (
                             <tr key={index}>
                                 {week.map(day => (
