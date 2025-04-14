@@ -39,7 +39,7 @@ export const CalendarTitleProvider = ({ children }) => {
   //used for knowing when to stop adding employee data
   const getLastDayOfMonth = () => {
     const { month, year } = getMonthYearFromTitle(title); // Get current month and year from state
-    const lastDay = new Date(year, month + 1, -1);
+    const lastDay = new Date(year, month + 1, 0);
     return lastDay.getDate();
   }
 

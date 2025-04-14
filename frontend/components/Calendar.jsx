@@ -1,4 +1,5 @@
 import CalendarDay from './CalendarDay';
+import NonCalendarDay from './NonCalendarDay';
 import CalendarTitle from '../components/CalendarTitle'
 import { useEffect } from 'react';
 import { useCalendarTitle } from './CalendarTitleContext';
@@ -16,7 +17,6 @@ function Calendar() {
         getLastDayOfMonth();
       },[title])
 
-    console.log(firstDay);
     
     const firstDayNotFound = true;
 
@@ -43,13 +43,15 @@ function Calendar() {
                             <th className="calendar-day-names">Saturday</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody> {/* if index == firstDay, firstDayNotFound = false
+                                if (firstDayNotFound) map prev month day
+                    */}
                         {rows.map((week, index) => (
                             <tr key={index}>
                                 {week.map(day => (
                                     <td key={day}>
-                                        {console.log(day)}
-                                        <CalendarDay day={day} />
+                                        {isInMonth(day, firstDay, lastDay)}
+                                        
                                     </td>
                                 ))}
                             </tr>
@@ -59,6 +61,14 @@ function Calendar() {
             </div>
         </>
     );
+}
+
+function isInMonth(day, firstDay, lastDay) {
+    if (day - 1 >= firstDay && day - firstDay <= lastDay) {
+        return <CalendarDay day={day - firstDay}/>;
+    } else {
+        return <NonCalendarDay/>;
+    }
 }
 
 export default Calendar;
