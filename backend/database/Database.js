@@ -9,43 +9,67 @@ const client = new MongoClient(uri, {
   }
 });
 
+
+
 const Database = {
 
-async run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } catch(error) {
-    console.log(error);
-  }
-},
+  async run() {
+    try {
+      // Connect the client to the server	(optional starting in v4.7)
+      await client.connect();
+      // Send a ping to confirm a successful connection
+      await client.db("admin").command({ ping: 1 });
+      console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
-async insertDocument(document) {
-  try {
-    await client.connect();
+  async getEmployeeTimes(date) {
     const database = client.db("Schedulizer");
     const collection = database.collection("ScheduleData");
 
-    // Iterate over each document in the array and perform upsert (insert or update)
-    const operations = document.map(doc => {
-      return {
-        updateOne: {
-          filter: { _id: doc._id },
-          update: { $set: doc },
-          upsert: true 
-        }
-      };
-    });
+    const query = { id: date };
+    const employeeInformation = collection.find(query);
 
-    const result = await collection.bulkWrite(operations);
-    console.log(`${result.upsertedCount} documents inserted, ${result.modifiedCount} documents updated`);
-  } catch (error) {
-    console.log(error);
+    if ((await collection.countDocuments(query)) === 0) {
+
+      console.log("No documents found!");
+
+    }
+
+    // Print returned documents
+
+    for await (const doc of employeeInformation) {
+
+      console.log(doc);
+
+    }
+  },
+
+  async insertDocument(document) {
+    try {
+      await client.connect();
+
+      const database = client.db("Schedulizer");
+      const collection = database.collection("ScheduleData");
+      // Iterate over each document in the array and perform upsert (insert or update)
+      const operations = document.map(doc => {
+        return {
+          updateOne: {
+            filter: { _id: doc._id },
+            update: { $set: doc },
+            upsert: true
+          }
+        };
+      });
+
+      const result = await collection.bulkWrite(operations);
+      console.log(`${result.upsertedCount} documents inserted, ${result.modifiedCount} documents updated`);
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
 
 
 };

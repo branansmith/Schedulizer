@@ -4,7 +4,8 @@ import CalendarTitle from '../components/CalendarTitle'
 import { useEffect } from 'react';
 import { useCalendarTitle } from './CalendarTitleContext';
 
-
+const database = require(".../backend/database/Database") // this doesn't work
+//need to set up express api to route info to frontend
 const totalCalendarDays = 42;
 
 function Calendar() {

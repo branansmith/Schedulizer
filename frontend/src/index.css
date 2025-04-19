@@ -118,7 +118,7 @@ td {
 
 /* Targeting the scrollbar */
 .employee-container::-webkit-scrollbar {
-  width: 7px;
+  width: 0px;
 }
 
 /* Styling the scrollbar track (background of the scrollbar) */
@@ -142,10 +142,10 @@ td {
 
 .non-calendar-day {
   height: calc(56vh / 4);
+  background-color: hsl(0, 0%, 40%);
   width: 100%;
   display: block;
   text-align: left;
-  visibility: hidden;
 }
 
 
