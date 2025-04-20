@@ -29,7 +29,7 @@ const Database = {
     const database = client.db("Schedulizer");
     const collection = database.collection("ScheduleData");
 
-    const query = { id: date };
+    const query = { _id: date };
     const employeeInformation = collection.find(query);
 
     if ((await collection.countDocuments(query)) === 0) {
