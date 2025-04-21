@@ -63,6 +63,7 @@ function Calendar() {
 }
 
 function isInMonth(day, firstDay, lastDay, title) {
+    console.log(title);
     const numberDate = day - firstDay;
     if (day - 1 >= firstDay && numberDate <= lastDay) {
         return <CalendarDay monthAndYear={title} day={numberDate}/>;

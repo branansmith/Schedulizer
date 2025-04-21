@@ -1,17 +1,26 @@
 //to run bot, in terminal type 'node index.js' and then commands should work in the discord
 //when deploying to a new server, get the discord server id, and update the 'guildId' in the config.json file
 
+
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
+const cors = require('cors');
+
 
 const express = require('express');
 const app = express();
 const employeeRoutes = require('./routes/employeeRoutes');
 
+app.use(cors( {
+	origin: '*',
+	methods: ['GET']
+}));
+
 app.use(express.json());
 app.use('/employees', employeeRoutes);
+
 
 const PORT = 3000;
 
