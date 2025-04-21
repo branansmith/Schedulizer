@@ -1,7 +1,6 @@
 import EmployeeTime from './EmployeeTime';
 
-function EmployeeContainer() {
-    const container = document.getElementById('employee-container');
+function EmployeeContainer({day, monthAndYear}) {
 
     return (
     <>

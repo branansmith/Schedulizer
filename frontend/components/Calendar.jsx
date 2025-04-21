@@ -4,8 +4,6 @@ import CalendarTitle from '../components/CalendarTitle'
 import { useEffect } from 'react';
 import { useCalendarTitle } from './CalendarTitleContext';
 
-const database = require(".../backend/database/Database") // this doesn't work
-//need to set up express api to route info to frontend
 const totalCalendarDays = 42;
 
 function Calendar() {
@@ -18,7 +16,9 @@ function Calendar() {
         getLastDayOfMonth();
       },[title])
 
-    
+    //title gives current month and year, and current day is found
+    //below, i need to use a fetch function with all three
+    // and display the data as well
     const firstDayNotFound = true;
 
     const days = Array.from({ length: totalCalendarDays }, (_, i) => i + 1);
@@ -49,7 +49,7 @@ function Calendar() {
                             <tr key={index}>
                                 {week.map(day => (
                                     <td key={day}>
-                                        {isInMonth(day, firstDay, lastDay)}
+                                        {isInMonth(day, firstDay, lastDay, title)}
                                         
                                     </td>
                                 ))}
@@ -62,9 +62,10 @@ function Calendar() {
     );
 }
 
-function isInMonth(day, firstDay, lastDay) {
-    if (day - 1 >= firstDay && day - firstDay <= lastDay) {
-        return <CalendarDay day={day - firstDay}/>;
+function isInMonth(day, firstDay, lastDay, title) {
+    const numberDate = day - firstDay;
+    if (day - 1 >= firstDay && numberDate <= lastDay) {
+        return <CalendarDay monthAndYear={title} day={numberDate}/>;
     } else {
         return <NonCalendarDay/>;
     }

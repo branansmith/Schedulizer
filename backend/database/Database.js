@@ -32,19 +32,15 @@ const Database = {
     const query = { _id: date };
     const employeeInformation = collection.find(query);
 
+    const results = await employeeInformation.toArray();
+
     if ((await collection.countDocuments(query)) === 0) {
 
       console.log("No documents found!");
 
     }
 
-    // Print returned documents
-
-    for await (const doc of employeeInformation) {
-
-      console.log(doc);
-
-    }
+    return results;
   },
 
   async insertDocument(document) {

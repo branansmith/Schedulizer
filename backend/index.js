@@ -6,6 +6,19 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 
+const express = require('express');
+const app = express();
+const employeeRoutes = require('./routes/employeeRoutes');
+
+app.use(express.json());
+app.use('/employees', employeeRoutes);
+
+const PORT = 3000;
+
+app.listen(PORT, () => {
+	console.log(`Server is running on http://localhost:${PORT}`)
+})
+
 
 //intents which allow the bot to view message content and get messages
 const client = new Client({ 
@@ -51,3 +64,5 @@ for (const file of eventFiles) {
 
 // Log in to Discord with your client's token
 client.login(token);
+
+module.exports = app;
