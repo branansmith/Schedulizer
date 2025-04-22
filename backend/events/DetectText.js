@@ -11,7 +11,7 @@ database.run();
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 
 //ALL EMPLOYEES SHOWN ON THE SCHEDULE MUST BE IN THIS ARRAY
-let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan"]
+let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan", "Isabella", "Cole", "Reflex", "Joe"]
 
 //check against to see if it's a date
 const isDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
@@ -301,41 +301,45 @@ async function detectText(photoName) {
 
               employee.name = block.Text;
 
+              console.log(employeeTimes.get(dates[0]));
 
-              //push into hashmap here
-              //what do I do about extend times?
-              //think about the design of the calender
-              //for the website
-              employeeTimes.get(dates[0]).push(employee.name + ": " + employee.sundayTime);
-              employeeTimes.get(dates[1]).push(employee.name + ": " + employee.mondayTime);
-              employeeTimes.get(dates[2]).push(employee.name + ": " + employee.tuesdayTime);
-              employeeTimes.get(dates[3]).push(employee.name + ": " + employee.wednesdayTime);
-              employeeTimes.get(dates[4]).push(employee.name + ": " + employee.thursdayTime);
-              employeeTimes.get(dates[5]).push(employee.name + ": " + employee.fridayTime);
-              employeeTimes.get(dates[6]).push(employee.name + ": " + employee.saturdayTime);
+              const dailyTimes = [
+                employee.sundayTime,
+                employee.mondayTime,
+                employee.tuesdayTime,
+                employee.wednesdayTime,
+                employee.thursdayTime,
+                employee.fridayTime,
+                employee.saturdayTime,
+              ];
+              
+              for (let i = 0; i < 7; i++) {
+                const entry = `${employee.name}: ${dailyTimes[i]}`;
+                const timesForDay = employeeTimes.get(dates[i]);
+                if (!timesForDay.includes(entry)) {
+                  timesForDay.push(entry);
+                }
+              }
 
-              //extend times?
-                if (employee.sundayExtendTime != undefined) {
-                  employeeTimes.get(dates[0]).push("EXTEND " + employee.name + ": " + employee.sundayExtendTime);
+              const extendTimesArr = [
+                employee.sundayExtendTime,
+                employee.mondayExtendTime,
+                employee.tuesdayExtendTime,
+                employee.wednesdayExtendTime,
+                employee.thursdayExtendTime,
+                employee.fridayExtendTime,
+                employee.saturdayExtendTime,
+              ];
+              
+              for (let i = 0; i < 7; i++) {
+                if (extendTimesArr[i] !== undefined) {
+                  const entry = `EXTEND ${employee.name}: ${extendTimesArr[i]}`;
+                  const timesForDay = employeeTimes.get(dates[i]);
+                  if (!timesForDay.includes(entry)) {
+                    timesForDay.push(entry);
+                  }
                 }
-                if (employee.mondaydayExtendTime != undefined) {
-                  employeeTimes.get(dates[1]).push("EXTEND " + employee.name + ": " + employee.mondayExtendTime);
-                }
-                if (employee.tuesdayExtendTime != undefined) {
-                  employeeTimes.get(dates[2]).push("EXTEND " + employee.name + ": " + employee.tuesdayExtendTime);
-                }
-                if (employee.wednesdayExtendTime != undefined) {
-                  employeeTimes.get(dates[3]).push("EXTEND " + employee.name + ": " + employee.wednesdayExtendTime);
-                }
-                if (employee.thursdayExtendTime != undefined) {
-                  employeeTimes.get(dates[4]).push("EXTEND " + employee.name + ": " + employee.thursdayExtendTime);
-                }
-                if (employee.fridayExtendTime != undefined) {
-                  employeeTimes.get(dates[5]).push("EXTEND " + employee.name + ": " + employee.fridayExtendTime);
-                }
-                if (employee.saturdayExtendTime != undefined) {
-                  employeeTimes.get(dates[6]).push("EXTEND " + employee.name + ": " + employee.saturdayExtendTime);
-                }
+              }
 
               //employee completely filled at this point
 

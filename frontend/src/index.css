@@ -1,5 +1,6 @@
 .calendar-title {
   font-size: 22px;
+  color: var(--color-accent);
 }
 
 .calendar-title-container {
@@ -34,25 +35,33 @@ table {
 
 th {
   width: calc(100% / 7);
-  color: hsl(0,0%, 18%);
+  color: var(--color-secondary);
 }
 
 .table-container {
   width: 100%;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--color-primary);
 }
 
 .calendar-container {
   height: 83.5vh;
+  background-color: var(--color-secondary);
+}
+
+* {
+  background-color: var(--color-secondary);
 }
 
 .calendar-headers {
-  border: 1px solid black;
+  border: 1px solid hsl(0,0%, 80%);
   font-size: 20px;
 }
 
 th.calendar-day-names {
-  border-right: 1px solid black;
+  color: var(--color-primary);
+  border-right: 1px solid hsl(0,0%, 80%);
+  padding-bottom: 5px;
+  padding-top: 8px;
 }
 
 .calendar {
@@ -68,7 +77,7 @@ th.calendar-day-names {
 }
 
 td {
-  border: 1px solid black;
+  border: 1px solid hsl(0,0%, 78%);
 }
 
 .day-number {
@@ -79,25 +88,26 @@ td {
   margin-bottom: 5px;
   margin-left: 0;
   margin-top: 0;
-  color: hsl(0,0%,50%);
+  color: var(--color-tertiary);
 }
 
 
 .employee-name {
- color: hsl(0, 0%, 0%);
+ color: var(--color-primary);
 }
+
 
 .employee-name .employee-time {
   font-size: 12px;
 }
 
 .employee-and-time {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   margin-right: 5px;
 }
 
 .employee-time {
-  color: hsl(0, 0%, 40%);
+  color: hsl(0,0%, 40%);
 }
 
 .employee-container {
@@ -142,10 +152,34 @@ td {
 
 .non-calendar-day {
   height: calc(56vh / 4);
-  background-color: hsl(0, 0%, 40%);
+  background-color: hsl(0,0%,97%);
   width: 100%;
   display: block;
   text-align: left;
 }
+
+:root {
+  --ff: "Montserrat", sans-serif;
+  --ff2: "Fira Code", monospace;
+  --h1: 800 2rem/1.2em var(--ff);
+  --p: 400 1rem/1.5em var(--ff);
+  --p-code: 300 0.7rem/2em var(--ff2);
+  --hue: 0;
+  --tertiary-hue: calc(var(--hue) + 300);
+  --accent-hue: calc(var(--hue) + 60);
+  --primary-color: hsl(var(--hue), 50%, 90%);
+  --pre-primary-color: hsl(var(--hue), 50%, 95%);
+  --secondary-color: hsl(var(--hue), 50%, 10%);
+  --tertiary-color: hsl(var(--tertiary-hue), 80%, 20%);
+  --accent-color: hsl(var(--accent-hue), 80%, 20%);
+}
+.dark {
+  --primary-color: hsl(var(--hue), 50%, 10%);
+  --pre-primary-color: hsl(var(--hue), 50%, 15%);
+  --secondary-color: hsl(var(--hue), 50%, 90%);
+  --tertiary-color: hsl(var(--tertiary-hue), 80%, 80%);
+  --accent-color: hsl(var(--accent-hue), 80%, 80%);
+}
+
 
 
