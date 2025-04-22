@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EmployeeTime from './EmployeeTime';
 
 function EmployeeContainer({ day, monthAndYear }) {
+
+    const [employees, setEmployees] = useState([]);
 
     if (!monthAndYear) {
         console.error("monthAndYear is undefined!");
@@ -11,7 +13,7 @@ function EmployeeContainer({ day, monthAndYear }) {
     const splitMonthAndYear = monthAndYear.split(" ");
     const splitMonth = splitMonthAndYear[0];
 
-    const pad = (num) => num.toString().padStart(2,'0');
+    const pad = (num) => num.toString().padStart(2, '0');
 
     const month = getNumberMonth(splitMonth);
     const paddedMonth = pad(month);
@@ -19,22 +21,39 @@ function EmployeeContainer({ day, monthAndYear }) {
     const year = splitMonthAndYear[1].slice(-2);
 
     useEffect(() => {
-        console.log(paddedMonth + " " + paddedDay + " " + year);
         fetch(`http://localhost:3000/employees/${paddedMonth}%2F${paddedDay}%2F${year}`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
+                setEmployees(data);
             })
             .catch((err) => console.error(err));
     }, [month, day, year]);
 
+    //for let i = 0; i < array.length make new employee time for each
+    //iteration
     return (
         <div className="employee-container" id="employee-container">
-            <EmployeeTime employee="Kamen" time="11:00AM - 2:00PM" />
-            <EmployeeTime employee="Juniper" time="9:00AM - 4:00PM" />
-            <EmployeeTime employee="Branan" time="5:00PM - 9:00PM" />
+          {employees.map((employeeArray, index) => (
+            <div key={index} className="employee-group">
+              {employeeArray.employees.map((entry, subIndex) => {
+                const split = employeeArray.employees[subIndex]?.split(": ") || [];
+                const name = split[0] ?? "Unknown";
+                const time = split[1] ?? "Unknown";
+      
+                return (
+                  <EmployeeTime
+                    key={`${index}-${subIndex}`}
+                    employee={name}
+                    time={time}
+                  />
+                );
+              })}
+            </div>
+          ))}
         </div>
-    );
+      );
+      
 }
 
 function getNumberMonth(month) {
