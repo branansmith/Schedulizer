@@ -1,4 +1,4 @@
-function uploadToS3(filePath) {
+async function uploadToS3(filePath) {
     var AWS = require("aws-sdk");
     AWS.config.update({ region: "us-east-1" });
 

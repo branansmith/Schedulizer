@@ -18,8 +18,6 @@ module.exports = {
 	execute(message) {
 		const messageAttributes = message.attachments;
 
-		//after downloading the file, need to get the path of that file
-		//that was just downloaded
 		messageAttributes.forEach((entry) => {
 		if (entry.name.endsWith('.jpg') || entry.name.endsWith('.png') || entry.name.endsWith('pdf')) {
 			let filePath = `/Users/branansmith/Desktop/discord-bot/backend/${entry.name}`;
@@ -30,31 +28,15 @@ module.exports = {
 			request.get(entryUrl)
 			.on('error', console.error)
 			.pipe(writeStream);
-			//uploads to s3
-			//if file is already in there, i believe it overrides it
 			
 			writeStream.on('finish', async () => {
 				try {
-				  // Wait for the upload to complete
-				  await uploadToS3(filePath);
-			  
-				  setTimeout(() => {
-					fs.unlinkSync(filePath);
-					detectText(entry.name);
-				  }, 4000);
+				  await uploadToS3(filePath).then(() => detectText(entry.name)).then(() => fs.unlinkSync(filePath));
 				} catch (error) {
 				  console.error('Error uploading file to S3:', error);
 				}
-			  });//needs to wait until file is uploaded to s3
-			
-			//deletes file from local directory
-			
+			  });
 
-			//downloads file -> sends to amazon textract -> extracts data
-			// -> use data on 'whattimedoiworktoday' website -> deletes file from 
-			//directory to prevent unneeded storage us
-		} else {
-			console.log('not a photo');
 		}
 		});
 		

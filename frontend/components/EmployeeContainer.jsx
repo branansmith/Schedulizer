@@ -9,7 +9,7 @@ function EmployeeContainer({ day, monthAndYear }) {
     const [loading, setLoading] = useState(true);
 
     if (!monthAndYear) {
-        return null; // Bail out to avoid crashing
+        return null;
     }
 
     const splitMonthAndYear = monthAndYear.split(" ");
