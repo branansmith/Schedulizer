@@ -11,7 +11,7 @@ database.run();
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 
 //ALL EMPLOYEES SHOWN ON THE SCHEDULE MUST BE IN THIS ARRAY
-let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan", "Isabella", "Cole", "Reflex", "Joe"]
+let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan", "Isabella", "Cole", "Reflex", "Joe", "Bethany"]
 
 //check against to see if it's a date
 const isDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
@@ -151,6 +151,7 @@ async function detectText(photoName) {
           }
 
           timeFrame = block.Text.split(" ");
+
           if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[2])) {
             time = timeFrame[0] + " - " + timeFrame[2];
           } else if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[1]) && timeFrame[2] == undefined) {
@@ -207,6 +208,8 @@ async function detectText(photoName) {
               var extendTimesRemaining = extendTimes.size;
 
               //finds extend time days
+
+              //BUG IS RIGHT HERE
               if (extendTimesRemaining != 0) {
                 for (let [extendTime, extendGeometry] of extendTimes) {
                   var extendDay = 0;
@@ -301,8 +304,6 @@ async function detectText(photoName) {
 
               employee.name = block.Text;
 
-              console.log(employeeTimes.get(dates[0]));
-
               const dailyTimes = [
                 employee.sundayTime,
                 employee.mondayTime,
@@ -317,6 +318,7 @@ async function detectText(photoName) {
                 const entry = `${employee.name}: ${dailyTimes[i]}`;
                 const timesForDay = employeeTimes.get(dates[i]);
                 if (!timesForDay.includes(entry)) {
+                  console.log("NORMAL ENTRY: " + entry);
                   timesForDay.push(entry);
                 }
               }
@@ -336,22 +338,12 @@ async function detectText(photoName) {
                   const entry = `EXTEND ${employee.name}: ${extendTimesArr[i]}`;
                   const timesForDay = employeeTimes.get(dates[i]);
                   if (!timesForDay.includes(entry)) {
+                    console.log("EXTEND TIME ENTRY: " + entry);
                     timesForDay.push(entry);
                   }
                 }
               }
 
-              //employee completely filled at this point
-
-              //converts map to documents
-              //so that it can be inserted into database
-
-              //this successfully inserts documents into the
-              //database, but it inserts it multiple
-              //times, PRIORITY
-              //also need to edit it so that when this is
-              //inserted and it finds an id that's already in there
-              //it overrides it
               const documents = Array.from(employeeTimes, ([_id, employees]) => ({
                 _id,
                 employees
@@ -365,7 +357,7 @@ async function detectText(photoName) {
             case 9:
               //sets extend time
               //employee.mondayExtendTime = block.Text;
-              extendTimes.set(block.Text, block.Geometry.BoundingBox.Left);
+              extendTimes.set(time, block.Geometry.BoundingBox.Left);
               extendTime = false;
               weekFilled = 7;
               break;

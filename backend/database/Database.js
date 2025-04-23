@@ -34,12 +34,6 @@ const Database = {
 
     const results = await employeeInformation.toArray();
 
-    if ((await collection.countDocuments(query)) === 0) {
-
-      console.log("No documents found!");
-
-    }
-
     return results;
   },
 

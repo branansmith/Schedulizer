@@ -9,7 +9,6 @@ function EmployeeContainer({ day, monthAndYear }) {
     const [loading, setLoading] = useState(true);
 
     if (!monthAndYear) {
-        console.error("monthAndYear is undefined!");
         return null; // Bail out to avoid crashing
     }
 
@@ -28,7 +27,6 @@ function EmployeeContainer({ day, monthAndYear }) {
         fetch(`http://localhost:3000/employees/${paddedMonth}%2F${paddedDay}%2F${year}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setEmployees(data);
                 setLoading(false);
             })
