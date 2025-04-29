@@ -153,9 +153,9 @@ async function detectText(photoName) {
           timeFrame = block.Text.split(" ");
 
           if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[2])) {
-            time = timeFrame[0] + " - " + timeFrame[2];
+            time = timeFrame[0].substring(0, timeFrame[0].indexOf("M") + 1) + " - " + timeFrame[2].substring(0, timeFrame[2].indexOf("M") + 1);
           } else if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[1]) && timeFrame[2] == undefined) {
-            time = timeFrame[0] + " - " + timeFrame[1];
+            time = time = timeFrame[0].substring(0, timeFrame[0].indexOf("M") + 1) + " - " + timeFrame[1].substring(0, timeFrame[1].indexOf("M") + 1);
           } else {
             storeTime.push(block.Text);
             waitingSecondTime = true;

@@ -1,5 +1,5 @@
 .calendar-title {
-  font-size: 26px;
+  font-size: 30px;
   color: var(--color-accent);
 }
 
@@ -191,7 +191,7 @@ td {
 }
 
 .employee-list {
-  width: 50%;
+  width: 10%;
   text-align: left;
   margin-left: 100px;
   overflow: scroll;
