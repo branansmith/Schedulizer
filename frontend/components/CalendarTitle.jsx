@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCalendarTitle } from './CalendarTitleContext';
+import FilterButton from './FilterButton'
 
 const currentDate = new Date();
 
@@ -18,7 +19,10 @@ function CalendarTitle() {
         <div className="calendar-title-box">
           <h3 className="calendar-title">{title}</h3>
         </div>
+        
         <button className="month-button" onClick={() => incrementMonth()}>&gt;</button>
+        <FilterButton/>
+
       </div>
     </>
   );

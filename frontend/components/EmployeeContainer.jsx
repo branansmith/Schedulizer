@@ -23,7 +23,7 @@ function EmployeeContainer({ day, monthAndYear }) {
     const year = splitMonthAndYear[1].slice(-2);
 
     useEffect(() => {
-        setLoading(true); // start loading
+        setLoading(true);
         fetch(`http://localhost:3000/employees/${paddedMonth}%2F${paddedDay}%2F${year}`)
             .then((res) => res.json())
             .then((data) => {
@@ -45,8 +45,6 @@ function EmployeeContainer({ day, monthAndYear }) {
           </div>
       );
   }
-    //need to implement loading somehow as well as 
-    //if there are more people on the schedule than normal
     return (
       <div className="employee-container" id="employee-container">
           {employees.map((employeeArray, index) => (

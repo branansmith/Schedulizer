@@ -1,6 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const employeeController = require('../controller/employeeController');
+const { employees }= require('../events/DetectText');
+
+router.get("/list", async function (req, res) {
+    try {
+        console.log(employees);
+        res.send(employees);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Error getting employees");
+    }
+});
+
 
 //to get 12/04/24, in the url use %2F for /
 //so you would type in http://localhost:3000/employees/12%2F03%2F24
@@ -14,5 +26,6 @@ router.get("/:date", async function (req, res) {
         res.status(500).send("Error retrieving times");
     }
 });
+
 
 module.exports = router;

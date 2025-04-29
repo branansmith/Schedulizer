@@ -1,5 +1,5 @@
 //updated bot on developer portal to allow message content intent
-const detectText = require('./DetectText.js');
+const {detectText} = require('./DetectText.js');
 const uploadToS3 = require('./uploadToS3.js');
 
 const { Events } = require('discord.js');

@@ -1,5 +1,5 @@
 .calendar-title {
-  font-size: 22px;
+  font-size: 26px;
   color: var(--color-accent);
 }
 
@@ -77,7 +77,7 @@ td {
 }
 
 .day-number {
-  font-size: 16px;
+  font-size: 18px;
   text-align: right;
   padding: 5px;
   margin-right: 0px;
@@ -177,5 +177,22 @@ td {
   --accent-color: hsl(var(--accent-hue), 80%, 80%);
 }
 
+.employees {
+  display: none;
+  margin: 4px;
+  font-size: 18px;
+  margin-top: 26px;
+}
 
+.filter-button {
+  margin-top: 26px;
+  font-size: 18px;
 
+}
+
+.employee-list {
+  width: 50%;
+  text-align: left;
+  margin-left: 100px;
+  overflow: scroll;
+}

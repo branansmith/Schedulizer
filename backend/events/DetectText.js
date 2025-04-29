@@ -11,7 +11,7 @@ database.run();
 let importantWords = ["R/O", "OFF", "Holiday", "PTO", "FH"]
 
 //ALL EMPLOYEES SHOWN ON THE SCHEDULE MUST BE IN THIS ARRAY
-let employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan", "Isabella", "Cole", "Reflex", "Joe", "Bethany"]
+const employees = ["Sam", "Ben", "Juniper", "Romeo", "Esti", "Kamen", "Branan", "Isabella", "Cole", "Reflex", "Bethany"];
 
 //check against to see if it's a date
 const isDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/([0-9]{2})$/;
@@ -348,7 +348,7 @@ async function detectText(photoName) {
                 _id,
                 employees
               }));
-              database.insertDocument(documents);
+              database.insertDocument(documents).then(() => employeeTimes.clear());
 
               console.log(employee);
               employeesFilled++;
@@ -390,4 +390,4 @@ async function detectText(photoName) {
 
 
 
-module.exports = detectText;
+module.exports = {detectText, employees};
