@@ -163,7 +163,6 @@ async function detectText(photoName) {
         } else {
           time = block.Text;
         }
-        console.log(time);
         if (storeTime.length == 2) {
           time = storeTime[0] + " - " + storeTime[1];
           storeTime = [];
@@ -338,7 +337,6 @@ async function detectText(photoName) {
                   const entry = `EXTEND ${employee.name}: ${extendTimesArr[i]}`;
                   const timesForDay = employeeTimes.get(dates[i]);
                   if (!timesForDay.includes(entry)) {
-                    console.log("EXTEND TIME ENTRY: " + entry);
                     timesForDay.push(entry);
                   }
                 }
@@ -350,7 +348,6 @@ async function detectText(photoName) {
               }));
               database.insertDocument(documents).then(() => employeeTimes.clear());
 
-              console.log(employee);
               employeesFilled++;
               weekFilled = 0;
               break;
