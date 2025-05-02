@@ -155,14 +155,15 @@ async function detectText(photoName) {
           if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[2])) {
             time = timeFrame[0].substring(0, timeFrame[0].indexOf("M") + 1) + " - " + timeFrame[2].substring(0, timeFrame[2].indexOf("M") + 1);
           } else if (isTimeFrame.test(timeFrame[0]) && isTimeFrame.test(timeFrame[1]) && timeFrame[2] == undefined) {
-            time = time = timeFrame[0].substring(0, timeFrame[0].indexOf("M") + 1) + " - " + timeFrame[1].substring(0, timeFrame[1].indexOf("M") + 1);
+            time = timeFrame[0].substring(0, timeFrame[0].indexOf("M") + 1) + " - " + timeFrame[1].substring(0, timeFrame[1].indexOf("M") + 1);
           } else {
-            storeTime.push(block.Text);
+            storeTime.push(timeFrame[0].substring(0, timeFrame[0].indexOf("M") + 1));
             waitingSecondTime = true;
           }
         } else {
           time = block.Text;
         }
+        console.log(time);
         if (storeTime.length == 2) {
           time = storeTime[0] + " - " + storeTime[1];
           storeTime = [];
@@ -318,7 +319,6 @@ async function detectText(photoName) {
                 const entry = `${employee.name}: ${dailyTimes[i]}`;
                 const timesForDay = employeeTimes.get(dates[i]);
                 if (!timesForDay.includes(entry)) {
-                  console.log("NORMAL ENTRY: " + entry);
                   timesForDay.push(entry);
                 }
               }

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 
 function FilterButton() {
     const [employees, setEmployees] = useState([]);
+
+    const [currentFilter, setFilter] = useState("All");
     //list employees in detecttext employees function
     //make them display 'none' in css
     useEffect(() => {
@@ -12,24 +14,30 @@ function FilterButton() {
             .then((data => {
                 setEmployees(data);
             }))
+        console.log(localStorage.getItem('filter'));
+        setFilter(localStorage.getItem('filter'));
+        filter(currentFilter);
     }, []);
 
+    //useEffect for when page loads, apply filter, default filter is All
+    //when user selects filter, save selection in useState constant
+    //when page changes it uses the constant to determine what is filtered
 
     return (
         <div className="employee-list">
             <button className="filter-button" onClick={() => listNames()}>Filter</button>
             {employees.map((employee, index) => {
                 return (
-                <button className="employees" onClick={() => selectName(employee)} key={index}>{employee}</button>
+                <button className="employees" onClick={() => filter(employee)} key={index}>{employee}</button>
                 );
             })}
-            <button className="employees" onClick={() => selectName("All")}>All</button>
+            <button className="employees" onClick={() => filter("All")}>All</button>
         </div>
     )
 }
 
 
-function selectName(employee) {
+function filter(employee) {
     const employeeTimes = document.getElementsByClassName("employee-and-time");
     const filterButton = document.getElementsByClassName("filter-button");
 
@@ -59,6 +67,7 @@ function selectName(employee) {
       }
 
       filterButton[0].style.display = "inline-block";
+      localStorage.setItem('filter', employee);
 }
 
 function listNames() {
