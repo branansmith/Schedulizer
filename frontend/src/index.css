@@ -178,21 +178,68 @@ td {
 }
 
 .employees {
-  display: none;
   margin: 4px;
   font-size: 18px;
-  margin-top: 26px;
+  margin-top: 0px;
 }
 
-.filter-button {
-  margin-top: 26px;
-  font-size: 18px;
-
+h2 {
+  font-size: 16px;
 }
 
 .employee-list {
-  width: 10%;
+  width: 50%;
   text-align: left;
   margin-left: 100px;
   overflow: scroll;
+}
+
+@media (max-width: 768px) {
+  .calendar-title {
+    font-size: 20px;
+  }
+
+  .calendar-title-box {
+    width: 90%;
+    padding: 5px;
+  }
+
+  .month-button {
+    margin: 10px auto;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  .calendar-day,
+  .non-calendar-day {
+    height: auto;
+    min-height: 60px;
+  }
+
+  .calendar-container {
+    height: auto;
+    padding-bottom: 20px;
+  }
+
+  .employee-container {
+    height: auto;
+    max-height: 150px;
+  }
+
+  .employee-list {
+    width: 90%;
+    margin-left: 0;
+    overflow-x: scroll;
+  }
+
+  .calendar-title-container {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
 }

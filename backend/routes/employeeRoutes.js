@@ -5,7 +5,6 @@ const { employees }= require('../events/DetectText');
 
 router.get("/list", async function (req, res) {
     try {
-        console.log(employees);
         res.send(employees);
     } catch (err) {
         console.log(err);
