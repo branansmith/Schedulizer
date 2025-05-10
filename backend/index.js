@@ -38,6 +38,19 @@ const client = new Client({
 ], 
 });
 
+client.on('shardError', error => {
+	console.error('A WebSocket connection encountered an error:', error);
+});
+
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
+});
+
+process.on('uncaughtException', error => {
+	console.error('Uncaught exception:,', error);
+});
+
+
 client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
