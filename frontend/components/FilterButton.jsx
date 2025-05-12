@@ -10,7 +10,7 @@ function FilterButton() {
     useEffect(() => {
         
 
-        fetch("http://localhost:3000/employees/list")
+        fetch("https://backend-5g2q.onrender.com/employees/list")
             .then((res) => res.json())
             .then((data => {
                 setEmployees(data);

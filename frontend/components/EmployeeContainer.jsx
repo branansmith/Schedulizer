@@ -24,7 +24,7 @@ function EmployeeContainer({ day, monthAndYear }) {
 
     useEffect(() => {
         setLoading(true);
-        fetch(`http://localhost:3000/employees/${paddedMonth}%2F${paddedDay}%2F${year}`)
+        fetch(`https://backend-5g2q.onrender.com/employees/${paddedMonth}%2F${paddedDay}%2F${year}`)
             .then((res) => res.json())
             .then((data) => {
                 setEmployees(data);
